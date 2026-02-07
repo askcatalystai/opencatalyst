@@ -1,239 +1,206 @@
-# 🚀 OpenCatalyst
+# OpenCatalyst 🚀
 
-**AI assistant for ecommerce brands — simple, focused, powerful.**
+AI-powered ecommerce assistant for WhatsApp, Email, and Chat. Built for Shopify, WooCommerce, and Medusa stores.
 
-OpenCatalyst is a simplified AI agent platform built specifically for Shopify, Medusa, and WooCommerce stores. Think OpenClaw, but purpose-built for ecommerce operations.
+> The simpler, ecommerce-focused alternative to OpenClaw.
 
-## Why OpenCatalyst?
+## Features
 
-| Problem | Solution |
-|---------|----------|
-| Customer support is overwhelming | AI handles common questions 24/7 |
-| Order tracking is manual | Automated updates + proactive alerts |
-| Inventory management is reactive | AI monitors stock, predicts needs |
-| Multiple tools, no integration | One AI that connects everything |
+- 🤖 **AI-Powered Support** - Claude or GPT handles customer inquiries
+- 📱 **WhatsApp Integration** - Connect with customers on WhatsApp Business
+- 📧 **Email Support** - Automated email responses
+- 💬 **Web Chat Widget** - Embed on your store
+- 🛒 **Order Tracking** - Real-time order status and tracking
+- 🔍 **Product Search** - Help customers find what they need
+- 💡 **Smart Recommendations** - Personalized product suggestions
+
+## Supported Platforms
+
+- **Shopify** - Full integration with Admin API
+- **WooCommerce** - REST API integration
+- **Medusa** - Native support for Medusa v2
 
 ## Quick Start
 
 ```bash
+# Install globally
 npm install -g opencatalyst
-opencatalyst init
+
+# Initialize a new project
+opencatalyst init --name "My Store" --platform shopify
+
+# Configure your API keys in .env
+cp .env.example .env
+
+# Start the gateway
 opencatalyst start
-```
-
-## Core Concepts
-
-### 🏪 Stores
-Connect your ecommerce platform once. OpenCatalyst handles the rest.
-
-```yaml
-stores:
-  - name: "Lohitha Foods"
-    platform: medusa
-    url: https://api.lohithafoods.com
-    apiKey: ${MEDUSA_API_KEY}
-```
-
-Supported platforms:
-- **Shopify** (Admin API + Storefront API)
-- **Medusa.js** (Full API access)
-- **WooCommerce** (REST API)
-
-### 📱 Channels
-Where your AI assistant lives.
-
-```yaml
-channels:
-  slack:
-    botToken: ${SLACK_BOT_TOKEN}
-    channels: ["#orders", "#support"]
-  
-  webchat:
-    enabled: true
-    # Embed on your store
-  
-  whatsapp:
-    # For customer support
-  
-  email:
-    # Order confirmations, support tickets
-```
-
-### 🛠️ Skills
-Pre-built capabilities for ecommerce:
-
-| Skill | What it does |
-|-------|--------------|
-| `order-lookup` | "Where's my order?" → instant tracking |
-| `inventory-alerts` | Low stock notifications |
-| `customer-support` | Handle common questions |
-| `sales-insights` | Daily/weekly sales summaries |
-| `product-search` | Find products by description |
-| `abandoned-cart` | Recovery workflows |
-| `returns-handler` | Process return requests |
-
-### 🔄 Workflows
-Automate common operations:
-
-```yaml
-workflows:
-  low-stock-alert:
-    trigger: inventory.below_threshold
-    threshold: 10
-    actions:
-      - notify: "#inventory"
-      - message: "⚠️ {{product.name}} is low ({{quantity}} left)"
-  
-  order-shipped:
-    trigger: order.shipped
-    actions:
-      - email: customer
-      - whatsapp: customer
-      - message: "Your order is on the way! 🚚"
-```
-
-## Architecture
-
-```
-Customer (WhatsApp/Web/Email)
-         │
-         ▼
-┌─────────────────────────────┐
-│     OpenCatalyst Gateway    │
-│    (your server/Vercel)     │
-└──────────────┬──────────────┘
-               │
-    ┌──────────┼──────────┐
-    ▼          ▼          ▼
-┌────────┐ ┌────────┐ ┌────────┐
-│Shopify │ │ Medusa │ │  WC    │
-│ Store  │ │  API   │ │  API   │
-└────────┘ └────────┘ └────────┘
 ```
 
 ## Configuration
 
-```yaml
-# opencatalyst.yaml
+Create a `catalyst.config.json` file:
 
-name: "Lohitha Foods Store Assistant"
-model: claude-sonnet-4  # or gpt-4o, gemini-pro
-
-stores:
-  - name: lohitha
-    platform: medusa
-    url: https://api.lohithafoods.com
-
-channels:
-  slack:
-    enabled: true
-    botToken: ${SLACK_BOT_TOKEN}
-  webchat:
-    enabled: true
-    theme: "rice-gold"  # Match your brand
-
-skills:
-  - order-lookup
-  - inventory-alerts
-  - customer-support
-  - sales-insights
-
-workflows:
-  - low-stock-alert
-  - daily-summary
-```
-
-## Deployment Options
-
-### 1. Local (Development)
-```bash
-opencatalyst start --watch
-```
-
-### 2. Vercel (Recommended for production)
-```bash
-vercel deploy
-```
-
-### 3. Docker
-```bash
-docker run -d opencatalyst/opencatalyst
-```
-
-### 4. Self-hosted
-```bash
-pm2 start opencatalyst
-```
-
-## API
-
-OpenCatalyst exposes a simple API for custom integrations:
-
-```typescript
-// Ask the assistant anything
-POST /api/ask
+```json
 {
-  "message": "How many orders did we get today?",
-  "channel": "api"
-}
-
-// Trigger a workflow
-POST /api/workflows/run
-{
-  "workflow": "daily-summary",
-  "params": { "channel": "#sales" }
-}
-
-// Get store metrics
-GET /api/metrics
-{
-  "today": { "orders": 45, "revenue": 12500 },
-  "week": { "orders": 287, "revenue": 78000 }
-}
-```
-
-## Skills Development
-
-Create custom skills for your store:
-
-```typescript
-// skills/rice-recommendations/index.ts
-import { defineSkill } from 'opencatalyst';
-
-export default defineSkill({
-  name: 'rice-recommendations',
-  description: 'Recommend rice varieties based on cuisine',
-  
-  async run({ query, store }) {
-    const products = await store.products.search(query);
-    return formatRecommendations(products);
+  "store": {
+    "name": "My Awesome Store",
+    "platform": "shopify",
+    "url": "https://my-store.myshopify.com"
+  },
+  "ai": {
+    "provider": "anthropic",
+    "model": "claude-sonnet-4-20250514",
+    "apiKey": "your-api-key"
+  },
+  "channels": {
+    "whatsapp": {
+      "enabled": true,
+      "phoneNumber": "+1234567890"
+    },
+    "webchat": {
+      "enabled": true
+    }
+  },
+  "agent": {
+    "name": "Catalyst",
+    "greeting": "Hi! How can I help you today?",
+    "capabilities": ["orders", "products", "support"]
   }
+}
+```
+
+## CLI Commands
+
+```bash
+# Start the gateway server
+opencatalyst start
+
+# Initialize a new project
+opencatalyst init
+
+# Show configuration status
+opencatalyst status
+
+# Interactive chat mode (for testing)
+opencatalyst chat
+```
+
+## API Endpoints
+
+Once running, the gateway exposes:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/api/chat` | POST | Send a chat message |
+| `/api/chat/:sessionId/history` | GET | Get conversation history |
+| `/api/products/search?q=...` | GET | Search products |
+| `/api/orders/:orderId` | GET | Get order details |
+| `/webhook/:channel` | POST | Incoming message webhook |
+
+### Chat API Example
+
+```bash
+curl -X POST http://localhost:3939/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Where is my order #1234?",
+    "sessionId": "customer-123"
+  }'
+```
+
+## SDK Usage
+
+Use OpenCatalyst programmatically:
+
+```typescript
+import { createCatalyst, loadConfig } from 'opencatalyst';
+
+const config = loadConfig();
+
+const catalyst = createCatalyst({
+  config,
+  onMessage: (msg) => {
+    console.log(`New message from ${msg.from}: ${msg.text}`);
+  },
 });
+
+catalyst.start();
+```
+
+### Using Individual Integrations
+
+```typescript
+import { ShopifyIntegration } from 'opencatalyst/sdk';
+
+const shopify = new ShopifyIntegration({
+  storeDomain: 'my-store.myshopify.com',
+  accessToken: 'your-access-token',
+});
+
+const order = await shopify.getOrder('#1234');
+console.log(order);
+```
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `ANTHROPIC_API_KEY` | Anthropic API key for Claude |
+| `OPENAI_API_KEY` | OpenAI API key (alternative to Anthropic) |
+| `CATALYST_STORE_URL` | Store URL override |
+| `CATALYST_STORE_PLATFORM` | Platform override |
+| `SHOPIFY_ACCESS_TOKEN` | Shopify Admin API token |
+| `SHOPIFY_STORE_DOMAIN` | Shopify store domain |
+| `WOOCOMMERCE_KEY` | WooCommerce consumer key |
+| `WOOCOMMERCE_SECRET` | WooCommerce consumer secret |
+| `MEDUSA_BACKEND_URL` | Medusa backend URL |
+| `MEDUSA_API_KEY` | Medusa API key |
+| `LOG_LEVEL` | Logging level (debug, info, warn, error) |
+
+## Web Chat Widget
+
+Embed the chat widget on your store:
+
+```html
+<script>
+  (function(w, d, s, o) {
+    var j = d.createElement(s);
+    j.async = true;
+    j.src = 'https://your-gateway.com/widget.js';
+    j.onload = function() {
+      w.OpenCatalyst.init({
+        widgetId: 'your-widget-id',
+        gatewayUrl: 'https://your-gateway.com'
+      });
+    };
+    d.head.appendChild(j);
+  })(window, document, 'script');
+</script>
 ```
 
 ## Roadmap
 
-- [x] Core Gateway
+- [x] Core gateway and API
 - [x] Shopify integration
+- [x] WooCommerce integration
 - [x] Medusa integration
-- [ ] WooCommerce integration
-- [x] Slack channel
-- [ ] WhatsApp Business
-- [x] WebChat widget
-- [ ] Email integration
-- [ ] Inventory alerts
-- [ ] Sales dashboards
-- [ ] Multi-store support
-- [ ] Voice assistant
+- [x] Memory/conversation persistence
+- [ ] WhatsApp Business API (Baileys)
+- [ ] Email channel (SMTP/IMAP)
+- [ ] Web chat widget
+- [ ] Returns and refunds workflow
+- [ ] Multi-language support
+- [ ] Analytics dashboard
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md)
+Contributions are welcome! Please read our contributing guidelines.
 
 ## License
 
-MIT © [Catalyst AI](https://askcatalyst.ai)
+MIT © Catalyst AI
 
 ---
 
-Built with ❤️ by **Catalyst AI** — Making ecommerce smarter, one store at a time.
+Built with ❤️ by [Catalyst AI](https://askcatalyst.ai)
