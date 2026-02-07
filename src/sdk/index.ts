@@ -1,7 +1,5 @@
 /**
  * OpenCatalyst SDK
- *
- * For integrating OpenCatalyst into your own applications
  */
 
 export { CustomerAgent } from "../agents/customer.js";
