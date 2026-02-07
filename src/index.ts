@@ -1,15 +1,21 @@
-/**
- * OpenCatalyst - AI-powered ecommerce assistant
- */
+// OpenCatalyst - AI assistant for ecommerce brands
 
-export { createCatalyst, type CatalystConfig, type IncomingMessage, type OutgoingMessage } from "./gateway/catalyst.js";
-export { CustomerAgent } from "./agents/customer.js";
-export { MemoryStore } from "./memory/store.js";
-export { WhatsAppChannel } from "./channels/whatsapp.js";
-export { EmailChannel } from "./channels/email.js";
-export { WebChatChannel } from "./channels/webchat.js";
-export { ShopifyIntegration } from "./integrations/shopify.js";
-export { MedusaIntegration } from "./integrations/medusa.js";
-export { WooCommerceIntegration } from "./integrations/woocommerce.js";
-export { loadConfig, saveConfig, createDefaultConfig, type Config } from "./config/config.js";
-export { createLogger } from "./utils/logger.js";
+// Core exports
+export { Agent } from './agent/index.js';
+export { loadConfig, validateConfig } from './config/loader.js';
+
+// Store integrations
+export { createStoreClient, MedusaStoreClient, ShopifyStoreClient } from './stores/index.js';
+
+// Skills
+export { loadSkills, getAvailableSkills } from './skills/index.js';
+
+// Core systems (memory, soul, workspace)
+export { MemoryStore, Soul, Workspace } from './core/index.js';
+export type { MemoryEntry, Memory, SoulConfig, WorkspaceConfig, SessionData, CustomSkill } from './core/index.js';
+
+// Types
+export * from './types/index.js';
+
+// Re-export Hono for custom extensions
+export { Hono } from 'hono';

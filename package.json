@@ -1,31 +1,18 @@
 {
   "name": "opencatalyst",
   "version": "0.1.0",
-  "description": "AI-powered ecommerce assistant - WhatsApp, Email, Chat for Shopify, WooCommerce, Medusa",
-  "keywords": [
-    "ecommerce",
-    "ai",
-    "chatbot",
-    "whatsapp",
-    "shopify",
-    "woocommerce",
-    "medusa",
-    "customer-support"
-  ],
-  "license": "MIT",
-  "author": "Catalyst AI",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/askcatalystai/opencatalyst.git"
-  },
-  "bin": {
-    "opencatalyst": "dist/cli.js"
-  },
+  "description": "AI assistant for ecommerce brands — simple, focused, powerful",
   "type": "module",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "opencatalyst": "./dist/cli/index.js"
+  },
   "exports": {
     ".": "./dist/index.js",
-    "./sdk": "./dist/sdk/index.js"
+    "./agent": "./dist/agent/index.js",
+    "./stores": "./dist/stores/index.js",
+    "./core": "./dist/core/index.js"
   },
   "files": [
     "dist/",
@@ -33,39 +20,56 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsx watch src/cli.ts",
-    "start": "node dist/cli.js",
-    "lint": "eslint src/",
-    "format": "prettier --write src/",
+    "dev": "concurrently -n api,web -c cyan,magenta \"tsx watch src/gateway/index.ts\" \"pnpm --filter @opencatalyst/web dev\"",
+    "dev:api": "tsx watch src/gateway/index.ts",
+    "dev:web": "pnpm --filter @opencatalyst/web dev",
+    "build": "tsup && pnpm --filter @opencatalyst/web build",
+    "build:api": "tsup",
+    "build:web": "pnpm --filter @opencatalyst/web build",
+    "start": "node dist/gateway/index.js",
+    "cli": "tsx src/cli/index.ts",
     "test": "vitest",
+    "lint": "eslint src",
     "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "ai",
+    "ecommerce",
+    "shopify",
+    "medusa",
+    "woocommerce",
+    "assistant",
+    "automation",
+    "agent",
+    "customer-support"
+  ],
+  "author": "Catalyst AI <hello@askcatalyst.ai>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/askcatalystai/opencatalyst.git"
+  },
+  "homepage": "https://opencatalyst.ai",
+  "engines": {
+    "node": ">=20"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",
-    "@hono/node-server": "^1.13.7",
-    "baileys": "^6.7.16",
-    "chalk": "^5.3.0",
-    "commander": "^12.1.0",
-    "dotenv": "^16.4.7",
-    "hono": "^4.6.16",
-    "nanoid": "^5.0.9",
-    "node-cache": "^5.1.2",
-    "openai": "^4.77.3",
-    "pino": "^9.6.0",
-    "pino-pretty": "^13.0.0",
-    "zod": "^3.24.1"
+    "@hono/node-server": "^1.13.0",
+    "@shopify/shopify-api": "^11.0.0",
+    "commander": "^12.0.0",
+    "hono": "^4.6.0",
+    "openai": "^4.70.0",
+    "yaml": "^2.6.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.5",
-    "eslint": "^9.17.0",
-    "prettier": "^3.4.2",
-    "tsup": "^8.3.5",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
-  },
-  "engines": {
-    "node": ">=20.0.0"
+    "@types/node": "^22.0.0",
+    "concurrently": "^9.0.0",
+    "eslint": "^9.0.0",
+    "tsup": "^8.3.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
   }
 }
