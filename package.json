@@ -1,75 +1,29 @@
 {
   "name": "opencatalyst",
   "version": "0.1.0",
-  "description": "AI assistant for ecommerce brands — simple, focused, powerful",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "bin": {
-    "opencatalyst": "./dist/cli/index.js"
-  },
-  "exports": {
-    ".": "./dist/index.js",
-    "./agent": "./dist/agent/index.js",
-    "./stores": "./dist/stores/index.js",
-    "./core": "./dist/core/index.js"
-  },
-  "files": [
-    "dist/",
-    "README.md",
-    "LICENSE"
-  ],
+  "private": true,
   "scripts": {
-    "dev": "concurrently -n api,web -c cyan,magenta \"tsx watch src/gateway/index.ts\" \"pnpm --filter @opencatalyst/web dev\"",
-    "dev:api": "tsx watch src/gateway/index.ts",
-    "dev:web": "pnpm --filter @opencatalyst/web dev",
-    "build": "tsup && pnpm --filter @opencatalyst/web build",
-    "build:api": "tsup",
-    "build:web": "pnpm --filter @opencatalyst/web build",
-    "start": "node dist/gateway/index.js",
-    "cli": "tsx src/cli/index.ts",
-    "test": "vitest",
-    "lint": "eslint src",
-    "typecheck": "tsc --noEmit"
-  },
-  "keywords": [
-    "ai",
-    "ecommerce",
-    "shopify",
-    "medusa",
-    "woocommerce",
-    "assistant",
-    "automation",
-    "agent",
-    "customer-support"
-  ],
-  "author": "Catalyst AI <hello@askcatalyst.ai>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/askcatalystai/opencatalyst.git"
-  },
-  "homepage": "https://opencatalyst.ai",
-  "engines": {
-    "node": ">=20"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.0",
-    "@hono/node-server": "^1.13.0",
-    "@shopify/shopify-api": "^11.0.0",
-    "commander": "^12.0.0",
-    "hono": "^4.6.0",
-    "openai": "^4.70.0",
-    "yaml": "^2.6.0",
-    "zod": "^3.23.0"
+    "lucide-react": "^0.469.0",
+    "nanoid": "^5.0.9",
+    "next": "15.1.0",
+    "openai": "^4.77.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "resend": "^4.0.1"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "concurrently": "^9.0.0",
-    "eslint": "^9.0.0",
-    "tsup": "^8.3.0",
-    "tsx": "^4.19.0",
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.3",
+    "@types/react-dom": "^19.0.2",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.2"
   }
 }
